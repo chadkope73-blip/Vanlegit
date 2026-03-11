@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VanLegit | Overnight Vehicle Legality Planner</title>
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#13233f;
+      --card:#142033cc;
+      --line:#2a3d63;
+      --text:#e8eefc;
+      --muted:#a9b7d3;
+      --accent:#8dd3ff;
+      --accent2:#ffd98a;
+      --good:#65d98f;
+      --maybe:#ffd166;
+      --bad:#ff8a80;
+      --purple:#c7b0ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,var(--bg2),var(--bg1));
+      color:var(--text);
+      margin:0;
+      min-height:100vh;
+      padding:20px;
+    }
+    .container{max-width:860px;margin:0 auto}
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:22px;
+      margin-bottom:18px;
+      background:
+        radial-gradient(circle at top right, rgba(141,211,255,.18), transparent 28%),
+        linear-gradient(180deg, rgba(255,217,138,.08), rgba(255,255,255,.02));
+      box-shadow:0 20px 60px rgba(0,0,0,.28);
+    }
+    .topo{
+      position:absolute;
+      inset:auto -10% -8% -10%;
+      height:120px;
+      opacity:.28;
+      background:
+        repeating-radial-gradient(circle at 20% 120%, transparent 0 14px, #8dd3ff 15px 16px, transparent 17px 29px),
+        repeating-radial-gradient(circle at 70% 130%, transparent 0 18px, #ffd98a 19px 20px, transparent 21px 38px),
+        repeating-radial-gradient(circle at 40% 120%, transparent 0 22px, #c7b0ff 23px 24px, transparent 25px 46px);
+    }
+    .brand{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+    .logo{width:56px;height:56px;flex:0 0 56px}
+    .logo img{width:100%;height:100%;object-fit:contain}
+    .eyebrow{display:inline-flex;align-items:center;font-size:.84rem;color:var(--accent2);letter-spacing:.03em;text-transform:uppercase}
+    h1{margin:4px 0 6px;font-size:2rem;line-height:1.05}
+    .subtitle{margin:0;color:var(--muted);max-width:48rem}
+    .card{
+      background:var(--card);
+      backdrop-filter:blur(8px);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 16px 40px rgba(0,0,0,.2);
+    }
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .full{grid-column:1 / -1}
+    label{display:block;font-size:.9rem;color:var(--muted);margin:0 0 6px;text-align:left}
+    input,button{
+      width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line);font-size:1rem
+    }
+    input{background:#0d1727;color:var(--text)}
+    button{background:linear-gradient(180deg,var(--accent),#67b8f6);color:#07111f;font-weight:700;cursor:pointer;border:none;box-shadow:0 10px 24px rgba(103,184,246,.22)}
+    button.secondary{background:linear-gradient(180deg,#ffe7b2,#ffd98a);box-shadow:0 10px 24px rgba(255,217,138,.16)}
+    .result{margin-top:18px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--line);border-radius:20px;text-align:left}
+    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+    .kpi{border:1px solid var(--line);border-radius:16px;padding:12px;background:#0d1727}
+    .kpi .label{font-size:.82rem;color:var(--muted);margin-bottom:4px}
+    .kpi .value{font-size:1.05rem;font-weight:700}
+    .good{color:var(--good);font-weight:800}
+    .maybe{color:var(--maybe);font-weight:800}
+    .bad{color:var(--bad);font-weight:800}
+    .small,.footer-note{color:var(--muted);font-size:.88rem;line-height:1.45}
+    .footer-note{margin-top:14px}
+    .navline{margin-top:8px;font-size:.84rem;color:var(--muted)}
+    .navline a{color:var(--accent);text-decoration:none}
+    @media (max-width:640px){.grid,.kpis{grid-template-columns:1fr}h1{font-size:1.75rem}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <section class="hero">
+    <div class="brand">
+      <div class="logo"><img src="/logo.png" alt="InTandem ToolWorks logo"></div>
+      <div>
+        <div class="eyebrow">InTandem ToolWorks</div>
+        <h1>VanLegit</h1>
+        <p class="subtitle">A respectful overnight vehicle legality planner for trip planning. Built to help travelers understand local restrictions, not challenge them.</p>
+        <div class="navline">Toolbelt planning · Works offline with Colorado priority ZIPs, GPS, or coordinates</div>
+      </div>
+    </div>
+    <div class="topo"></div>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <div>
+        <label for="zip">ZIP code</label>
+        <input id="zip" placeholder="Colorado priority areas">
+      </div>
+      <div>
+        <label for="lat">Latitude</label>
+        <input id="lat" placeholder="Optional">
+      </div>
+      <div>
+        <label for="lon">Longitude</label>
+        <input id="lon" placeholder="Optional">
+      </div>
+      <div class="full" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <button onclick="checkLegality()">Check Overnight Status</button>
+        <button class="secondary" onclick="getLocation()">Use My Location</button>
+      </div>
+    </div>
+
+    <div id="output" class="result">
+      <div class="small">Life is short. Camp where camping belongs. In a big world with a lot of campsites, there is no reason to overnight somewhere that clearly is not meant for it. VanLegit is about showing respect for local communities while helping travelers plan better.</div>
+    </div>
+
+    <div class="footer-note">Offline planning estimate only. Local ordinances change. Always verify current local rules and posted signage.</div>
+  </section>
+</div>
+
+<script>
+  const zipLookup = {
+    "80202": {lat:39.7525, lon:-104.9995, name:"Denver"},
+    "80014": {lat:39.6671, lon:-104.8344, name:"Aurora"},
+    "80021": {lat:39.8712, lon:-105.0972, name:"Broomfield"},
+    "80301": {lat:40.0392, lon:-105.2519, name:"Boulder"},
+    "80524": {lat:40.5853, lon:-105.0439, name:"Fort Collins"},
+    "80401": {lat:39.7555, lon:-105.2211, name:"Golden"},
+    "80439": {lat:39.6333, lon:-105.3172, name:"Evergreen"},
+    "80452": {lat:39.7055, lon:-105.6997, name:"Idaho Springs"},
+    "80443": {lat:39.6275, lon:-106.0434, name:"Frisco"},
+    "80424": {lat:39.4817, lon:-106.0384, name:"Breckenridge"},
+    "81657": {lat:39.6403, lon:-106.3742, name:"Vail"},
+    "81620": {lat:39.5347, lon:-106.9378, name:"Edwards"},
+    "81601": {lat:39.5505, lon:-107.3248, name:"Glenwood Springs"},
+    "81501": {lat:39.0639, lon:-108.5506, name:"Grand Junction"},
+    "81401": {lat:38.4783, lon:-107.8762, name:"Montrose"},
+    "81435": {lat:37.9375, lon:-107.8123, name:"Telluride"},
+    "81432": {lat:38.0297, lon:-107.6714, name:"Ridgway"},
+    "81611": {lat:39.1911, lon:-106.8175, name:"Aspen"},
+    "81623": {lat:39.3914, lon:-107.2112, name:"Carbondale"},
+    "80435": {lat:39.6403, lon:-105.8716, name:"Dillon"},
+    "80498": {lat:39.6466, lon:-106.0510, name:"Silverthorne"},
+    "80487": {lat:40.4849, lon:-106.8317, name:"Steamboat Springs"},
+    "81101": {lat:37.4694, lon:-105.8797, name:"Alamosa"},
+    "81301": {lat:37.2753, lon:-107.8801, name:"Durango"},
+    "81147": {lat:37.2694, lon:-106.9995, name:"Pagosa Springs"},
+    "80903": {lat:38.8339, lon:-104.8214, name:"Colorado Springs"},
+    "81201": {lat:38.5347, lon:-106.1240, name:"Salida"}
+  };
+
+  const policyZones = [
+    {
+      name:"Colorado Springs",
+      lat:38.8339,
+      lon:-104.8214,
+      radius:10,
+      status:"illegal",
+      note:"Sleeping in vehicles is prohibited within city limits.",
+      suggestion:"Look for National Forest or other legal camping options outside city boundaries."
+    },
+    {
+      name:"Denver",
+      lat:39.7392,
+      lon:-104.9903,
+      radius:12,
+      status:"illegal",
+      note:"Urban overnight vehicle sleeping is generally not appropriate and may violate local rules.",
+      suggestion:"Plan for a campground, legal lodging, or an approved site outside the metro core."
+    },
+    {
+      name:"Boulder",
+      lat:40.0149,
+      lon:-105.2705,
+      radius:6,
+      status:"illegal",
+      note:"Vehicle overnighting is often restricted in and around the city.",
+      suggestion:"Use designated camping or legal overnight options outside city limits."
+    },
+    {
+      name:"Aspen",
+      lat:39.1911,
+      lon:-106.8175,
+      radius:5,
+      status:"illegal",
+      note:"Resort-area overnight vehicle sleeping is generally not welcomed in-town.",
+      suggestion:"Seek legal camping or permitted overnight options outside the resort core."
+    },
+    {
+      name:"Vail",
+      lat:39.6403,
+      lon:-106.3742,
+      radius:5,
+      status:"illegal",
+      note:"Resort-area overnight vehicle sleeping is generally restricted.",
+      suggestion:"Use a campground, approved lot, or legal site outside the main corridor."
+    },
+    {
+      name:"Breckenridge",
+      lat:39.4817,
+      lon:-106.0384,
+      radius:5,
+      status:"illegal",
+      note:"Town-center overnight vehicle sleeping is generally not intended for public streets and lots.",
+      suggestion:"Look for legitimate camping or permitted parking outside town limits."
+    },
+    {
+      name:"Telluride",
+      lat:37.9375,
+      lon:-107.8123,
+      radius:4.5,
+      status:"illegal",
+      note:"Overnight vehicle sleeping is typically not welcomed inside resort-town areas.",
+      suggestion:"Plan legal camping or approved overnight stops outside the town boundary."
+    },
+    {
+      name:"Durango",
+      lat:37.2753,
+      lon:-107.8801,
+      radius:5,
+      status:"restricted",
+      note:"Overnight vehicle sleeping may be limited by local rules and location-specific restrictions.",
+      suggestion:"Verify local rules and prefer designated camping or permitted overnight locations."
+    },
+    {
+      name:"Grand Junction",
+      lat:39.0639,
+      lon:-108.5506,
+      radius:6,
+      status:"restricted",
+      note:"Urban overnight parking rules may vary by area and property type.",
+      suggestion:"Check signage and local rules, or choose a designated overnight site."
+    }
+  ];
+
+  function haversineMiles(lat1, lon1, lat2, lon2) {
+    const R = 3958.8;
+    const toRad = deg => deg * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function resolveLocation() {
+    const zip = document.getElementById('zip').value.trim();
+    if (zip && zipLookup[zip]) return { ...zipLookup[zip], source: `ZIP ${zip}` };
+    const lat = parseFloat(document.getElementById('lat').value);
+    const lon = parseFloat(document.getElementById('lon').value);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      return { lat, lon, name: 'Custom coordinates', source: 'Lat/Lon' };
+    }
+    return null;
+  }
+
+  function classifyLocation(loc) {
+    let nearest = null;
+    for (const zone of policyZones) {
+      const distance = haversineMiles(loc.lat, loc.lon, zone.lat, zone.lon);
+      if (!nearest || distance < nearest.distance) nearest = { ...zone, distance };
+      if (distance <= zone.radius) return { ...zone, distance, inside: true };
+    }
+    return nearest ? { ...nearest, inside: false } : null;
+  }
+
+  function statusClass(status, inside) {
+    if (!inside) return 'good';
+    if (status === 'illegal') return 'bad';
+    if (status === 'restricted') return 'maybe';
+    return 'good';
+  }
+
+  function statusLabel(status, inside) {
+    if (!inside) return 'Likely Better Option';
+    if (status === 'illegal') return 'Illegal';
+    if (status === 'restricted') return 'Restricted';
+    return 'Unknown';
+  }
+
+  function checkLegality() {
+    const loc = resolveLocation();
+    const output = document.getElementById('output');
+
+    if (!loc) {
+      output.innerHTML = `<div class="small">Enter a supported ZIP code, coordinates, or use your current location.</div>`;
+      return;
+    }
+
+    const result = classifyLocation(loc);
+    if (!result) {
+      output.innerHTML = `<div class="small">No policy zones available yet for that location.</div>`;
+      return;
+    }
+
+    const label = statusLabel(result.status, result.inside);
+    const cls = statusClass(result.status, result.inside);
+    const distanceText = `${result.distance.toFixed(1)} miles`;
+    const summary = result.inside
+      ? result.note
+      : `You appear to be outside the nearest restricted zone. That does not guarantee overnight legality, but it may be a better place to continue planning responsibly.`;
+    const suggestion = result.inside
+      ? result.suggestion
+      : `Continue checking signage, local rules, and legitimate overnight options near your route.`;
+
+    output.innerHTML = `
+      <div class="small">Location source: <strong>${loc.source}</strong>${loc.name ? ` · ${loc.name}` : ''}</div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Nearest policy area</div><div class="value">${result.name}</div></div>
+        <div class="kpi"><div class="label">Distance to policy area</div><div class="value">${distanceText}</div></div>
+        <div class="kpi"><div class="label">Current status</div><div class="value"><span class="${cls}">${label}</span></div></div>
+        <div class="kpi"><div class="label">Planning stance</div><div class="value">Respect local communities</div></div>
+      </div>
+      <div class="footer-note"><strong>Why this matters:</strong> ${summary}</div>
+      <div class="footer-note"><strong>Suggestion:</strong> ${suggestion}</div>
+    `;
+  }
+
+  function getLocation() {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        document.getElementById('lat').value = pos.coords.latitude.toFixed(5);
+        document.getElementById('lon').value = pos.coords.longitude.toFixed(5);
+      },
+      () => {
+        const output = document.getElementById('output');
+        output.innerHTML = `<div class="small">Unable to read current location on this device.</div>`;
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  }
+</script>
+</body>
+</html>
